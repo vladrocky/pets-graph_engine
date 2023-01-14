@@ -46,7 +46,7 @@ axios.get(reqURL)
             let node = {
                 id: i,
                 label: i.toString(),
-                "node size": 40,
+                "node size": 30,
             }
             nodes.push(node);
 
@@ -67,7 +67,39 @@ axios.get(reqURL)
     })
     .then(() => {
         let data = { nodes: nodes, edges: edges };
-        let options = { "physics": { "barnesHut": { "gravitationalConstant": -4000, "springConstant": 0.006, "damping": 0.02 }, "repulsion": { "nodeDistance": 600 } } };
+        //let options = { "physics": { "barnesHut": { "gravitationalConstant": -4000, "springConstant": 0.006, "damping": 0.02 }, "repulsion": { "nodeDistance": 600 } } };
+        let options = {
+            navigation: true,
+            smoothCurves: false,
+            physics: {
+                barnesHut: {
+                    enabled: false
+                }
+            },
+            edges: {
+                width: 1,
+                style: 'line',
+                color: {
+                    color: '#eeeeee',
+                    highlight: '#fc0'
+                }
+            },
+            nodes: {
+                shape: 'circle',
+                font: {
+                    size: 10,
+                    color: '#eeeeee'
+                },
+                color: {
+                    border: '#ccc',
+                    background: '#1b1f27',
+                    highlight: {
+                        border: '#fc0',
+                        background: '#000000',
+                    }
+                }
+            }
+        };
 
         let container = document.getElementById('graph');
         container.style.height = "900px";
