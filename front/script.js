@@ -14,14 +14,20 @@ axios.get(reqURL)
     .then((response) => {
         matrix = response.data
         console.log(matrix[0]);
+
+        return matrix[0].matrix
+
+        // тут просто выбираем какой level передать дальше для отображения
+        // return matrix[1].matrix
+        // return matrix[2].matrix
     })
-    .then(() => {
+    .then((data) => {
         let matrixData = document.createElement('div');
         let table = document.createElement('table');
 
         matrixData.style.color = '#ffffff';
 
-        matrix[0].matrix.forEach(str => {
+        data.forEach(str => {
             let row = document.createElement('tr');
             str.forEach(val => {
                 let dat = document.createElement('td')
@@ -37,7 +43,7 @@ axios.get(reqURL)
 
         document.getElementById('app').appendChild(matrixData);
 
-        return matrix[0].matrix
+        return data
     })
     .then((data) => {
         console.log(data);
@@ -102,7 +108,7 @@ axios.get(reqURL)
         };
 
         let container = document.getElementById('graph');
-        container.style.height = "900px";
+        container.style.height = "600px";
         let network = new vis.Network(container, data, options);
     })
 
