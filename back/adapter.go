@@ -1,18 +1,26 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 )
 
-// type Level struct {
-// 	matrix   [][]int
-// 	lowlevel [][]int
-// }
+const LevelURL = "http://localhost:3000/levels" // development
+const inpLevel = 1                              // development
 
-func GetLevels() string {
-	resp, err := http.Get("http://localhost:3000/levels")
+// сорян, пока не знаю как правильно на go сериализовывать
+type (
+	Level struct {
+		Matrix   [][]int `json:"matrix"`
+		LowLevel [][]int `json:"lowlevel"`
+	}
+)
+
+func GetLevels() {
+	resp, err := http.Get(LevelURL)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -22,16 +30,19 @@ func GetLevels() string {
 		log.Fatalln(err)
 	}
 
-	//fmt.Println(string(body))
+	result, err := GetGraphByLevel(inpLevel, string(body))
 
-	// var data []Level
-
-	// json.Unmarshal(body, &data)
-
-	// for i := range data {
-	// 	fmt.Println(data[i])
-	// }
-
-	result := string(body)
-	return result
+	fmt.Println(result, err)
 }
+
+func GetGraphByLevel(level int, resp string) (Level, error) {
+	var levels []Level
+
+	if err := json.Unmarshal([]byte(resp), &levels); err != nil {
+		return Level{}, fmt.Errorf("%w", err)
+	}
+
+	return levels[level], nil
+}
+
+func main() {}
